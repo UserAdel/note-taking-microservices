@@ -18,7 +18,7 @@ export class AuthService {
     this.jwtRefreshExpiresIn = process.env.JWT_REFRESH_EXPIRES_IN! || "7d";
     this.bcryptRounds = parseInt(process.env.BCRYPT_ROUNDS || "10", 10);
     if (!this.jwtSecret || !this.jwtRefreshSecret) {
-      throw new Error("JWT secrets are not defined in envirement variables");
+      throw new Error("JWT secrets are not defined in environment variables");
     }
   }
   async register(email: string, password: string): Promise<AuthToken> {

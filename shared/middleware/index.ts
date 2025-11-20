@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import { logError, ServiceError } from "../types";
+import { JWTPayload, logError, ServiceError } from "../types";
 import { createErrorResponse } from "../utils/index";
-
+import jwt from "jsonwebtoken";
 //extend express Request interface to include cutom properties
 declare global {
   namespace Express {
@@ -9,6 +9,27 @@ declare global {
       user?: any;
     }
   }
+}
+
+export function authenticationToken(req: Request, res: Response, next: NextFunction) {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+  if (!token) {
+    return res.status(401).json(createErrorResponse("No token provided"));
+  }
+  const jwtSecret=process.env.JWT_SECRET!;
+  if(!jwtSecret){
+    logError(new Error("JWT_SECRET is not definded"))
+    return res.status(500).json(createErrorResponse("Internal server error"));
+  }
+  const decoded=jwt.verify(token,jwtSecret,(err:any,decoded:any)=>{
+    if(err){
+      return res.status(401).json(createErrorResponse("Invalid token"));
+    }
+    req.user=decoded as JWTPayload
+    next();
+    
+  });
 }
 
 export type RequestHandler = (
