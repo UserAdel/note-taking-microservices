@@ -43,3 +43,12 @@ export class ServiceError extends Error {
     this.details = details;
   }
 }
+
+export function logError(error: Error, context?: Record<string, any>): void {
+  console.error("Error occurred", {
+    message: error.message,
+    stack: error.stack,
+    context,
+    timestamp: new Date().toISOString(),
+  });
+}

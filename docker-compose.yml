@@ -1,0 +1,25 @@
+# version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: noeverb-postgres
+    environment:
+      POSTGRES_USER: noeverb
+      POSTGRES_PASSWORD: notesverb123
+      POSTGRES_DB: noeverb
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql
+      - ./init-database.sql:/docker-entrypoint-initdb.d/init-database.sql
+    networks:
+      - notverb-network
+
+volumes:
+  postgres_data:
+
+networks:
+  notverb-network:
+    driver: bridge
+

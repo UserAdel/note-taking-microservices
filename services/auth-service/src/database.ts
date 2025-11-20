@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 
+// Prisma client with library engine type (configured in schema.prisma)
 const prisma = new PrismaClient({
   log:
     process.env.NODE_ENV === "development"
