@@ -1,0 +1,25 @@
+import { PrismaClient } from "@prisma/client";
+
+// Prisma client with library engine type (configured in schema.prisma)
+const prisma = new PrismaClient({
+  log:
+    process.env.NODE_ENV === "development"
+      ? ["query", "info", "error"]
+      : ["error"],
+});
+
+process.on("beforeExit", async () => {
+  await prisma.$disconnect();
+});
+
+process.on("SIGINT", async () => {
+  await prisma.$disconnect();
+  process.exit(0);
+});
+
+process.on("SIGTERM", async () => {
+  await prisma.$disconnect();
+  process.exit(0);
+});
+
+export default prisma;
