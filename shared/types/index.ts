@@ -1,4 +1,4 @@
-//shared typescript types defenitions for all microservices
+// shared typescript types defenitions for all microservices
 
 export interface User {
   id: string;
@@ -27,11 +27,46 @@ export interface UpdateProfileRequest {
   preferences?: Record<string, any>;
 }
 
+export interface Note {
+  id: string;
+  title: string;
+  content: string;
+  isDeleted: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  tags?: Tag[];
+}
+
+export interface Tag {
+  id: string;
+  name: string;
+  color?: string;
+  userId: string;
+  updatedAt: Date;
+}
+
+export interface CreateTagRequest {
+  name: string;
+  color?: string;
+}
+
+export interface CreateNoteRequest {
+  title: string;
+  content: string;
+  tagIds?: string[];
+}
+
+export interface UpdateNoteRequest {
+  title?: string;
+  content?: string;
+  tagIds?: string[];
+}
+
 export interface ServiceResponse<T = any> {
   success: boolean;
   data?: T;
   error?: string;
-  statusCode: number;
+  statusCode?: number;
 }
 
 export interface ApiResponse<T = any> {
@@ -42,21 +77,23 @@ export interface ApiResponse<T = any> {
   errors?: Record<string, string[]>;
 }
 
-export interface AuthToken {
+export interface AuthTokens {
   accessToken: string;
   refreshToken: string;
 }
+
 export interface JWTPayload {
   userId: string;
   email: string;
-  iat: number;
-  exp: number;
+  iat: number; // issued at
+  exp: number; // expiration time
 }
 
 export class ServiceError extends Error {
   statusCode: number;
   code?: string;
   details?: any;
+
   constructor(
     message: string,
     statusCode: number = 500,
